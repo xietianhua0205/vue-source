@@ -11,17 +11,24 @@
     // umd Vue
     // console.log(Vue)
     // 响应式, vue2， mvvm
-    new Vue({
+    let vm = new Vue({
         el: '#pp',
         // data: {},
         data () {
-            console.log(this)
-            return {}
+            return {
+                message: 'hello world',
+                list: [1, 2, 3, 4],
+                arr: [{
+                    a: '1'
+                }]
+            }
         },
         props: {},
         watch: {},
         methods: {}
     })
+    vm._data.arr.push({ b: 2 })
+    console.log(vm._data)
 </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div id="app">hello</div>
+<div id="app">hello {{ msg }}</div>
 <script src="dist/vue.js"></script>
 <script>
     // umd Vue
@@ -26,9 +26,10 @@
         props: {},
         watch: {},
         methods: {}
-    })
-    vm._data.arr.push({ b: 2 })
-    console.log(vm._data)
+    }).$mount('#app')
+    // vue 初次渲染流程 =》1 初始化数据 =》 2.模板编译 =》 变成 render()=> 生成虚拟节点=》 变成真实Dom=》放到页面
+
+    // vue 模板编译  template render  el 注意: el(必须要有), 先走 render（） 再走 template， 生命周期图
 </script>
 </body>
 </html>

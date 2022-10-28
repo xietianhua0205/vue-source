@@ -46,7 +46,6 @@ function defineReactive (data, key, value) {
     observer(value)  // 深度代理
     Object.defineProperty(data, key, {
         get () {  //  获取的时候触发
-            console.log('获取')
             return value
         },
         set (newValue) {  // 修改属性值的时候触发

@@ -13,7 +13,6 @@ const startTagOpen = new RegExp(`^<${qnameCapture}`) // 标签开头正则 捕�
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`) // 匹配标签结尾的 </div>
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/ // 匹配属性值
 const startTagClose = /^\s*(\/?)>/ // 匹配标签的结束的
-const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g
 
 // 遍历
 // 创建一个 ast 对象
@@ -44,7 +43,7 @@ function start(tag, attrs) { // 开始标签
 
 
 function charts(text) {  // 获取文本
-    text=text.replace(/s/g,'')
+    text=text.replace(/^\s+|\s+$/g,'') // 替换空格
     if(text){
         createParent.children.push({
             type: 3,

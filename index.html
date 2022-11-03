@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div id="app" title="test" style="color: red;font-size: 20px">hello {{ msg }} sdf {{abc}} <h2 style="color: black;font-size: 20px">张三你好</h2></div>
+<div id="app" title="test" style="color: red;font-size: 20px">hello {{ list }} sdf {{doc}} <h2 style="color: black;font-size: 20px">张三你好</h2></div>
 <!--<script src="src/compile/test.js"></script>-->
 <script src="dist/vue.js"></script>
 <script>
@@ -13,21 +13,25 @@
     // console.log(Vue)
     // 响应式, vue2， mvvm
     let vm = new Vue({
-        el: '#pp',
+        el: '#app',
         // data: {},
         data() {
             return {
-                message: 'hello world',
+                msg: 'hello world',
+                name: '谢天华',
                 list: [1, 2, 3, 4],
                 arr: [{
                     a: '1'
-                }]
+                }],
+                doc: '测试啊'
             }
         },
         props: {},
         watch: {},
         methods: {}
-    }).$mount('#app')
+    })
+    vm.doc = 'ceshia'
+    console.log(vm)
     // vue 初次渲染流程 =》1 初始化数据 =》 2.模板编译 =》 变成 render()=> 生成虚拟节点=》 变成真实Dom=》放到页面
 
     // vue 模板编译  template render  el 注意: el(必须要有), 先走 render（） 再走 template， 生命周期图

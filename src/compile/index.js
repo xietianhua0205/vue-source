@@ -18,6 +18,6 @@ export function compileTOFunction (el) {
     let code = generate(ast) // _c _v _s
     // step3 将render 字符串变成 函数
     let render = new Function(`with(this){return ${code}}`)
-    console.log(render)
+    return render
 }
 

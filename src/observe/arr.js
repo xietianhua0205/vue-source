@@ -24,7 +24,6 @@ methods.forEach(item => {
         switch (item) {
             case 'push':
             case 'unshift':
-                debugger
                 inserted = args
                 break;
             case 'splice':

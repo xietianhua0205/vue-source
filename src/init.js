@@ -1,8 +1,9 @@
-import {initState} from "./initState";
-import {compileTOFunction} from "./compile/index.js";
+import { initState } from "./initState";
+import { compileTOFunction } from "./compile/index.js";
+import { mountComponent } from './lifecycleMinix'
 
-export function initMixin(Vue) {
-    Vue.prototype._init = function (options) {
+export function initMixin (Vue) {
+    Vue.prototype._init = function(options) {
         let vm = this
         vm.$options = options
         // 初始化状态
@@ -12,9 +13,10 @@ export function initMixin(Vue) {
             vm.$mount(vm.$options.el)
         }
     }
-    Vue.prototype.$mount = function (el) {
+    Vue.prototype.$mount = function(el) {
         let vm = this
         el = document.querySelector(el) // 获取元素
+        vm.$el = el  // 将旧的 Dom 对象进行保存
         let options = vm.$options
         if (!options.render) {
             let template = options.template
@@ -22,9 +24,13 @@ export function initMixin(Vue) {
                 // 获取到 html
                 el = el.outerHTML
                 // 变成 AST 语法树
-                let ast = compileTOFunction(el)
+                let render = compileTOFunction(el)
+                // 将 render 函数变成虚拟dom--vnode; (2) 将vnode变成真实dom放到页面上去
+                options.render = render
             }
         }
+        // 挂载组件
+        mountComponent(vm, el)
     }
 }
 

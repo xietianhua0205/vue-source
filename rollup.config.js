@@ -13,7 +13,7 @@ export default {
         exclude: 'node_modules/**'
     }),
         serve({
-            port: 3000,
+            port: 3001,
             contentBase:'',// 表示当前目录
             openPage:'/index.html'
         })

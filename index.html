@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div id="app" title="test" style="color: red;font-size: 20px">{{msg}}</div>
+<div id="app" title="test" style="color: red;font-size: 20px">{{msg}}-{{name}}</div>
 <!--<script src="src/compile/test.js"></script>-->
 <script src="dist/vue.js"></script>
 <script>
@@ -32,7 +32,7 @@
         data() {
             return {
                 msg: 'hello world',
-                name: '谢天华',
+                name: '王五',
                 list: [1, 2, 3, 4],
                 arr: [{
                     a: '1'
@@ -49,11 +49,18 @@
     })
     setTimeout(() => {
         vm.msg = '张三'
-        vm._update(vm._render()) // vm._render() // 获取到vm上实例数据  vm._update 更新页面
-    }, 2000)
+    }, 3000)
+    setTimeout(() => {
+        vm.name = '王麻子'
+    }, 6000)
+
     // 问题  自动跟新
     // 1.数据变化，自动更新视图
     // 2. vue中更新组组件策略是: 以组件为单位，给每一个组件 添加 一个 watcher,属性变化 调用 watcher
+
+    // 二实现对象收集依赖
+    // dep 和 watch 关系 多对多 （为计算属性作铺垫）
+
 
     // vue 初次渲染流程 =》1 初始化数据 =》 2.模板编译 =》 变成 render()=> 生成虚拟节点=》 变成真实Dom=》放到页面
 

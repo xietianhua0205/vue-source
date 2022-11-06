@@ -1,19 +1,23 @@
-import { initState } from "./initState";
-import { compileTOFunction } from "./compile/index.js";
-import { mountComponent } from './lifecycleMinix'
+import {initState} from "./initState";
+import {compileTOFunction} from "./compile/index.js";
+import {callHook, mountComponent} from './lifecycle.js'
+import {mergeOptions} from "./utils/index.js";
 
-export function initMixin (Vue) {
-    Vue.prototype._init = function(options) {
+export function initMixin(Vue) {
+    Vue.prototype._init = function (options) {
         let vm = this
         vm.$options = options
+        vm.$options = mergeOptions(Vue.options, options)
+        callHook(vm, 'beforeCreated')
         // 初始化状态
         initState(vm)
+        callHook(vm, 'created')
         // 渲染模板
         if (vm.$options.el) {
             vm.$mount(vm.$options.el)
         }
     }
-    Vue.prototype.$mount = function(el) {
+    Vue.prototype.$mount = function (el) {
         let vm = this
         el = document.querySelector(el) // 获取元素
         vm.$el = el  // 将旧的 Dom 对象进行保存

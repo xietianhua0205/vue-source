@@ -1,5 +1,5 @@
 import { initMixin } from "./init";
-import { lifecycleMixin } from "./lifecycleMinix.js";
+import { lifecycleMixin } from "./lifecycle.js";
 import { renderMixin } from './vnode/index.js';
 import { initGlobalApi } from './global-api/index.js'
 

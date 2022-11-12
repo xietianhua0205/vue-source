@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div id="app" title="test" style="color: red;font-size: 20px">{{msg}}-{{name}}</div>
+<div id="app" title="test" style="color: red;font-size: 20px">{{ msg.a }}-{{ arr }}</div>
 <!--<script src="src/compile/test.js"></script>-->
 <script src="dist/vue.js"></script>
 <script>
@@ -21,8 +21,6 @@
     })
     Vue.Mixin({  // 全局的方法
         created() {
-            console.log(this)
-            console.log('b-----2')
         }
     })
 
@@ -31,13 +29,9 @@
         // data: {},
         data() {
             return {
-                msg: 'hello world',
-                name: '王五',
-                list: [1, 2, 3, 4],
-                arr: [{
-                    a: '1'
-                }],
-                doc: '测试啊'
+                msg: {a: 1},
+                name: '张三',
+                arr: [1, 2, 3]
             }
         },
         props: {},
@@ -48,11 +42,14 @@
         }
     })
     setTimeout(() => {
-        vm.msg = '张三'
-    }, 3000)
-    setTimeout(() => {
-        vm.name = '王麻子'
-    }, 6000)
+        vm.arr.push(2)
+    },2000)
+    // setTimeout(() => {
+    //     vm.msg = '张三'
+    // }, 3000)
+    // setTimeout(() => {
+    //     vm.name = '王麻子'
+    // }, 6000)
 
     // 问题  自动跟新
     // 1.数据变化，自动更新视图
@@ -60,6 +57,14 @@
 
     // 二实现对象收集依赖
     // dep 和 watch 关系 多对多 （为计算属性作铺垫）
+
+    // 三. 数组依赖收集
+    // 思路：
+    // 1. 我们要给所有的对象类型增加一个 dep []
+    // 2. 获取数组值，会调用 get 方法，希望让当前的数组记住这个渲染的watcher
+    // 2.1  需要获取当前的dep
+    // 2，2 当前面对数组取值的时候，我们将让数组的dep记住这个watcher
+    // 2.3  我们获取更新数组的时候调用 push shift 等等这些方法的时候，找到我们的watcher进行更新。
 
 
     // vue 初次渲染流程 =》1 初始化数据 =》 2.模板编译 =》 变成 render()=> 生成虚拟节点=》 变成真实Dom=》放到页面

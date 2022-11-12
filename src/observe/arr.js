@@ -30,10 +30,11 @@ methods.forEach(item => {
                 inserted = args.splice(2); // arr.splice(0,1,{a:6})
                 break;
         }
+        let ob = this.__ob__
         if (inserted) {
-            let ob = this.__ob__
             ob.observeArray(inserted)
         }
+        ob.dep.notify()
         //  数组追加对象的情况
         return result
     }

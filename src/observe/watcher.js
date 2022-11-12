@@ -40,7 +40,6 @@ class watcher {
 
     // 更新
     update() {
-        console.log('execute')
         this.getter()
     }
 }

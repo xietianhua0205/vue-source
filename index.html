@@ -41,8 +41,13 @@
             console.log(this.name)
         }
     })
-    setTimeout(() => {
+    setTimeout(() => { // 数据更新多次, 渲染只需要一次， 通过异步来处理; nextTick()
         vm.arr.push(2)
+        vm.arr.push(3)
+        vm.arr.push(4)
+        vm.$nextTick(()=>{
+           console.log(vm.$el.innerHTML)
+        })
     },2000)
     // setTimeout(() => {
     //     vm.msg = '张三'

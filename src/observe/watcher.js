@@ -1,5 +1,6 @@
 //(1) 通过 watcher 实现更新
 import {popTarget, pushTarget} from "./dep.js";
+import {nextTick} from '../utils/nextTick.js'
 
 let id = 0
 
@@ -38,9 +39,43 @@ class watcher {
         popTarget() // 给 dep 取消 watcher
     }
 
-    // 更新
-    update() {
+    run() {
         this.getter()
+        // 在这里调用 $next()
+    }
+
+    // 更新
+    update() {  // 注意，不要数据更新后每次都调用get 方法， get 方法回重新渲染
+        queueWatcher(this)
+        // this.getter()
+    }
+}
+
+let pending = false
+let queue = [] // 将需要批量更新的watcher 存放到一个列队中
+let has = {}
+
+function flushWatcher() {
+    setTimeout(() => {
+        queue.forEach((watcher) => {
+            watcher.run()
+        })
+        queue = []
+        has = {}
+        pending = false
+    }, 0)
+}
+
+function queueWatcher(watcher) {
+    let id = watcher.id // 每个组件都是同一个 watcher
+    if (has.id == null) {
+        queue.push(watcher)
+        has.id = id
+        // 防抖: 用户触发多次，只触发一次; 等待同步代码执行完成以后，再执行
+        if (!pending) {
+            nextTick(flushWatcher) // 相当于我们的定时器
+        }
+        pending = true
     }
 }
 
@@ -52,4 +87,10 @@ export default watcher
 // dep 于 watcher: 一对多 dep.name = [w1,w2] // 可能一个属性在视图上用了很多次
 
 //（2）实现对象收集依赖
+
+
+//  实现 $nextTick()
+
+// 优化
+// 1.  创建 nextTick 方法;
 

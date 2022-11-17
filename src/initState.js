@@ -10,7 +10,7 @@ export function initState(vm) {
         initData(vm)
     }
     if (ops.watch) {
-        initWatch()
+        initWatch(vm)
     }
     if (ops.methods) {
         initMethods()
@@ -46,7 +46,11 @@ function proxy(vm, source, key) {
 }
 
 
-function initWatch() {
+function initWatch(vm) {
+    // 获取 watch
+    let watch = vm.$options.watch
+    console.log(watch)
+    debugger
 
 }
 

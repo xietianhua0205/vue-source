@@ -45,7 +45,6 @@ class Observer {
 // 对 对象中的属性进行劫持
 function defineReactive(data, key, value) {
     let childDep = observer(value)  // 深度代理
-    console.log(childDep)
     let dep = new Dep(value) // 给每一个属性添加 一个 dep
     Object.defineProperty(data, key, {
         get() {  //  获取的时候触发  // 收集 watcher

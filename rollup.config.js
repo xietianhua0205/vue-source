@@ -12,10 +12,15 @@ export default {
     plugins:[babel({
         exclude: 'node_modules/**'
     }),
+        // serve({
+        //     port: 3001,
+        //     contentBase:'',// 表示当前目录
+        //     openPage:'/index.html'
+        // }),
         serve({
-            port: 3001,
+            port: 5000,
             contentBase:'',// 表示当前目录
-            openPage:'/index.html'
+            openPage:'/watch.html'
         })
     ]
 }

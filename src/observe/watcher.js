@@ -5,18 +5,28 @@ import {nextTick} from '../utils/nextTick.js'
 let id = 0
 
 class watcher {
-    constructor(vm, updateComponent, cb, options) {
+    constructor(vm, exprorfn, cb, options) {
         // (1)
         this.vm = vm
-        this.exprorfn = updateComponent
+        this.exprorfn = exprorfn
         this.cb = cb
         this.options = options
         this.id = id++
         this.deps = [] // watcher 存放 dep
         this.depsId = new Set()
         // 判断
-        if (typeof updateComponent === 'function') {
-            this.getter = updateComponent // 用来更新视图的
+        if (typeof exprorfn === 'function') {
+            this.getter = exprorfn // 用来更新视图的
+        } else { // 属性 {a,b,c}  字符串 变成函数
+            this.getter = function () { // 属性 c.c.c
+                let path = exprorfn.split('.')
+                let obj = vm
+                for (let i = 0; i < path.length; i++) {
+                    obj = obj[path[i]]
+                }
+                console.log(obj)
+                return obj
+            }
         }
         // 更新视图
         this.get()
@@ -47,7 +57,6 @@ class watcher {
     // 更新
     update() {  // 注意，不要数据更新后每次都调用get 方法， get 方法回重新渲染
         queueWatcher(this)
-        // this.getter()
     }
 }
 
@@ -59,6 +68,7 @@ function flushWatcher() {
     setTimeout(() => {
         queue.forEach((watcher) => {
             watcher.run()
+            watcher.cb()
         })
         queue = []
         has = {}

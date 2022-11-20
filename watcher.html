@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>watch机制的调试</title>
+</head>
+<body>
+<div id="app">{{ a }}</div>
+<script src="/dist/vue.js"></script>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            a: 1,
+            c: {
+                c: {
+                    c: 100
+                }
+            }
+        },
+        methods: {
+            aa() {
+                console.log('execute')
+            }
+        },
+        // watch 基本使用方式
+        // 1. 属性: 方法
+        // 2. 属性: 数组
+        // 3. 属性: 对象
+        // 4. 属性: 字符串
+        watch: {
+            // 'a'(newValue, oldValue) {
+            //     console.log(newValue)
+            // }
+            // 'a': [
+            //     (newValue, oldValue) => {
+            //         console.log(newValue)
+            //     },
+            //     (newValue, oldValue) => {
+            //         console.log(newValue)
+            //     }
+            // ],
+            'c.c.c'(newValue,oldValue){
+                console.log(newValue,oldValue);
+            }
+            // "a": {
+            //     handler(newValue, oldValue) {
+            //         console.log('watcher 执行了')
+            //     },
+            //     immediate: true
+            // },
+            // "a": 'aa'
+        }
+    })
+</script>
+</body>
+</html>
+
+<!--
+1: 安装 vue
+2： watch  4种基本使用
+3:  在自己 Vue 的初始化 中 进行格式化
+4: watch 最终实现方式
+
+>

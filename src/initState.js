@@ -89,7 +89,7 @@ export function stateMixin(vm) {
     },
         vm.prototype.$watch = function (Vue,exprorfn, handler, options={}) { // 上面就是格式化处理
             // 实现 watch 方法 就是 new watcher; 渲染走渲染的 watcher  $watch 走 watcher user false
-            let watcher = new Watcher(Vue, exprorfn, handler, options)
+            let watcher = new Watcher(Vue, exprorfn, handler, {...options,user:true})
             if (options.immediate) {
                 handler.call(Vue)
             }

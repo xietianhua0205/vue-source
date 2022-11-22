@@ -20,7 +20,7 @@ export default {
         serve({
             port: 5000,
             contentBase:'',// 表示当前目录
-            openPage:'/watch.html'
+            openPage:'/diff.html'
         })
     ]
 }

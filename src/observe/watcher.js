@@ -10,6 +10,7 @@ class watcher {
         this.vm = vm
         this.exprorfn = exprorfn
         this.cb = cb
+        this.user = !!options.user
         this.options = options
         this.id = id++
         this.deps = [] // watcher 存放 dep
@@ -24,12 +25,11 @@ class watcher {
                 for (let i = 0; i < path.length; i++) {
                     obj = obj[path[i]]
                 }
-                console.log(obj)
-                return obj
+                return obj // 第一次
             }
         }
-        // 更新视图
-        this.get()
+        // 4. 执行渲染页面
+        this.value = this.get() // 保存watch 初始值
     }
 
     addDep(dep) {
@@ -45,12 +45,20 @@ class watcher {
     // 初次渲染
     get() {
         pushTarget(this)  // 给 dep 添加 watcher
-        this.getter() // 渲染页面, 渲染页面的时候 才会 _s(),才会触发 插值解析，触发 get
+        const value = this.getter() // 渲染页面, 渲染页面的时候 才会 _s(),才会触发 插值解析，触发 get
         popTarget() // 给 dep 取消 watcher
+        return value
     }
 
-    run() {
-        this.getter()
+    run() { // old new
+        let value = this.get() // new
+        let oldValue = this.value // old
+        this.value = value
+        // 执行handler 这个用户的watcher
+        if (this.user) {
+            this.cb.call(this.vm, value, oldValue)
+        }
+        this.get()
         // 在这里调用 $next()
     }
 
@@ -68,7 +76,7 @@ function flushWatcher() {
     setTimeout(() => {
         queue.forEach((watcher) => {
             watcher.run()
-            watcher.cb()
+            // watcher.cb()
         })
         queue = []
         has = {}

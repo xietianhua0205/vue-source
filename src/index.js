@@ -20,13 +20,13 @@ stateMixin(Vue) //  给 vm 添加 $nextTick
 
 // 创建vnode
 let vm1 = new Vue({data:{name:"张三"}})
-let render1 = compileTOFunction(`<div id="a">{{name}}</div>`)
+let render1 = compileTOFunction(`<div id="a" style="color: red"></div>`)
 let vnode1 = render1.call(vm1)
 document.body.appendChild(createEL(vnode1))
 
 // 数据更新
 let vm2 = new Vue({data:{name:"李四"}})
-let render2 = compileTOFunction(`<p id="a">{{name}}</p>`)
+let render2 = compileTOFunction(`<div id="a">{{name}}</div>`)
 let vnode2 = render2.call(vm2)
 // patch 比对
 patch(vnode1,vnode2)

@@ -56,7 +56,7 @@ function updateChild(oldChildren, newChildren, el) {
 function updataRpors(vnode, oldProps = {}) { // 第一次属性
     let newProps = vnode.data || {} // 获取当前新节点的属性
     let el = vnode.el  // 获取当前真实节点
-
+    console.log('execute')
     // 判断 老的有属性，新的没有属性
     for (let key in oldProps) {
         if (!newProps[key]) {

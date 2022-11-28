@@ -9,6 +9,7 @@ export function mountComponent(vm, el) {
         vm._update(vm._render())
     }
     new watcher(vm, updateComponent, () => {
+        callHook(vm,'update')
     }, true)
     callHook(vm, 'mounted')
 }
@@ -30,7 +31,7 @@ export function callHook(vm, hook) {
     const handlers = vm.$options[hook]
     if (handlers) {
         for (let i = 0; i < handlers.length; i++) {
-            handlers[i].call(this)  // 改变生命周期的 this指向
+            handlers[i].call(vm)  // 改变生命周期的 this指向
         }
     }
 }

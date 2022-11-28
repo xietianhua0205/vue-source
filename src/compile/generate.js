@@ -67,6 +67,6 @@ function gen(node) {  // 文本 ，元素
 export function generate(el) {
     // 注意属性解析 {id:app, style:{color:red;font-size:20px}}
     let children = genChildren(el)
-    let code = `_c('${el.tag}',${el.attrs.length ? `${genProps(el.attrs)}` : 'undefined'},${children ? `${children}` : 'undefined'})`
+    let code = `_c('${el.tag}',${el.attrs.length ? `${genProps(el.attrs)}` : 'undefined'},${children ? `${children}` : ''})`
     return code
 }

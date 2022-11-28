@@ -18,7 +18,7 @@ starts.data = function (parentVal, childVal) {
 // } // 合并computed
 // starts.watch = function () {
 // } // 合并watch
-// starts.methods = function () {
+// starts.methods = function ()  {
 // } // 合并methods
 
 // 遍历生命周期

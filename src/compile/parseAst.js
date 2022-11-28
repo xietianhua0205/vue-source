@@ -14,56 +14,54 @@ const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`) // 匹配标签结尾的
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/ // 匹配属性值
 const startTagClose = /^\s*(\/?)>/ // 匹配标签的结束的
 
-// 遍历
-// 创建一个 ast 对象
-// 数据结构栈代码
-function createASTElement(tag, attrs) {
-    return {
-        tag, // 元素
-        attrs, //
-        children: [], // 子节点
-        type: 1,
-        parent: null // 是否有父元素
-    }
-}
-
-let root; // 根元素
-let createParent; // 当前父元素
-// 数据结构 栈
-let stack = []  // [div,h]
-
-function start(tag, attrs) { // 开始标签
-    let element = createASTElement(tag, attrs)
-    if (!root) {
-        root = element
-    }
-    createParent = element
-    stack.push(element)
-}
-
-
-function charts(text) {  // 获取文本
-    text=text.replace(/^\s+|\s+$/g,'') // 替换空格
-    if(text){
-        createParent.children.push({
-            type: 3,
-            text
-        })
-    }
-}
-
-function end(tag) { // 结束的标签, 出栈
-    // console.log(tag, '结束标签')
-    let element = stack.pop()
-    createParent = stack[stack.length - 1]
-    if (createParent) { // 元素的闭合
-        element.parent = createParent.tag
-        createParent.children.push(element)
-    }
-}
-
 
 export function parseHTML(html) {
+    // 遍历
+    // 创建一个 ast 对象
+    // 数据结构栈代码
+    function createASTElement(tag, attrs) {
+        return {
+            tag, // 元素
+            attrs, //
+            children: [], // 子节点
+            type: 1,
+            parent: null // 是否有父元素
+        }
+    }
+    let root; // 根元素
+    let createParent; // 当前父元素
+    // 数据结构 栈
+    let stack = []  // [div,h]
+    function start(tag, attrs) { // 开始标签
+        let element = createASTElement(tag, attrs)
+        if (!root) {
+            root = element
+        }
+        createParent = element
+        stack.push(element)
+    }
+
+
+    function charts(text) {  // 获取文本
+        text = text.replace(/^\s+|\s+$/g, '') // 替换空格
+        if (text) {
+            createParent.children.push({
+                type: 3,
+                text
+            })
+        }
+    }
+
+    function end(tag) { // 结束的标签, 出栈
+        // console.log(tag, '结束标签')
+        let element = stack.pop()
+        createParent = stack[stack.length - 1]
+        if (createParent) { // 元素的闭合
+            element.parent = createParent.tag
+            createParent.children.push(element)
+        }
+    }
+
     // <div id='app'> hello {{msg}} <h></h></div> // 开始标签  文本  结束标签
     while (html) { // 当html 为空的时候结束
         // 判断标签 <>
@@ -124,5 +122,6 @@ export function parseHTML(html) {
     function advance(n) {
         html = html.substring(n)
     }
+
     return root
 }

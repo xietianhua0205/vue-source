@@ -30,7 +30,6 @@ if (Promise) {
 
 export function nextTick(cb) {
     // 1 vue  2: 用户自定义
-    console.log(cb)  //  这里出现两个
     // 列队 [cb1,cb2]
     callback.push(cb)
     // Promise.then() vu e3

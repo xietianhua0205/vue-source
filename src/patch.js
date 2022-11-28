@@ -1,13 +1,12 @@
 import VNode from "vue/src/core/vdom/vnode.js";
 
-export function patch(oldVnode, vnode) {
+export function patch (oldVnode, vnode) {
     // 原则 将虚拟节点转换成真实的节点
     // 第一次渲染 oldValue 是一个真实的Dom
     if (oldVnode.nodeType === 1) {
         // vnode => 真实Dom
         // (1) 创建 新dom
         let el = createEL(vnode)
-        console.log(el);
         // (2) 替换  (1) 获取父节点 (2) 插入 (3) 删除
         let parentEl = oldVnode.parentNode // body
         parentEl.insertBefore(el, oldVnode.nextSibling)
@@ -48,15 +47,73 @@ export function patch(oldVnode, vnode) {
     }
 }
 
-function updateChild(oldChildren, newChildren, el) {
-    console.log(oldChildren, newChildren, el)
+function updateChild (oldChildren, newChildren, parent) {
+    // vue 中 diff 算法 优化  <li>1</li>   <li>2</li>
+    // dom 中操作元素 常用的逻辑  尾部添加  头部添加  倒叙  正序
+    // vue2 中采用双指针 遍历
+    // 创建双指针
+    let oldStartIndex = 0  // 老的开头索引
+    let oldStartVnode = oldChildren[oldStartIndex] // 老的开始元素
+    let oldEndIndex = oldChildren.length - 1
+    let oldEndVnode = oldChildren[oldEndIndex]
+
+    let newStartIndex = 0
+    let newStartVnode = newChildren[newStartIndex] // 新的开始元素
+    let newEndIndex = newChildren.length - 1
+    let newEndVnode = newChildren[newEndIndex]
+
+    function isSomeVnode (oldContext, newContext) {
+        return (oldContext.tag === newContext.tag) && (oldContext.key === newContext.key)
+    }
+
+    while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+        // 比对元素
+        // 是否是同一个元素头部
+        if (isSomeVnode(oldStartVnode, newStartVnode)) { // 正序比较
+            // 递归
+            patch(oldStartVnode, newStartVnode)
+            // 移动指针
+            oldStartVnode = oldChildren[++oldStartIndex]
+            newStartVnode = newChildren[++newStartIndex]
+        }else if(isSomeVnode(oldEndVnode, newEndVnode )){ // 倒叙比较
+            patch(oldEndVnode, newEndVnode)
+            oldEndVnode = oldChildren[--oldEndIndex]
+            newEndVnode = newChildren[--newEndIndex]
+        }else if(isSomeVnode(oldStartVnode,newEndVnode)){ // 交叉比对 (正序)
+            patch(oldStartVnode,newEndVnode)
+            oldStartVnode = oldChildren[++oldStartIndex]
+            newEndVnode = newChildren[--newEndIndex]
+        }else if(isSomeVnode(oldEndVnode,newStartVnode)){ // 交叉比对 (倒叙)
+            patch(oldEndVnode,newStartVnode) // 这个元素中有子节点的情况
+            oldEndVnode = oldChildren[--oldEndIndex]
+            newStartVnode = newChildren[++newStartIndex]
+            // 面试题： 为什么要添加 key？ 这个 key值为什么不能是 索引 index
+
+            //     <li key='桃子'>桃子</li>
+            // <li key='西瓜'>西瓜</li>
+            // <li key='香蕉'>香蕉</li>
+            //
+            // <li key='0'>香蕉</li>  创建 复制
+            // <li key='1'>西瓜</li>
+            // <li key='2'>桃子</li>
+
+            // 按照上面 比对逻辑是第一种情况
+        }
+
+    }
+    // 添加多余的儿子元素怒 旧的 2 新 5
+    if (newStartIndex <= newEndIndex) { // 2, 3
+        for (let i = newStartIndex; i <= newEndIndex; i++) {  // 注意这个 < = 一定是要的 上面的 while 循环 比对 会多出来一位 切记
+            parent.appendChild(createEL(newChildren[i]))
+        }
+    }
+
 }
 
 // 添加属性
-function updataRpors(vnode, oldProps = {}) { // 第一次属性
+function updataRpors (vnode, oldProps = {}) { // 第一次属性
     let newProps = vnode.data || {} // 获取当前新节点的属性
     let el = vnode.el  // 获取当前真实节点
-    console.log('execute')
     // 判断 老的有属性，新的没有属性
     for (let key in oldProps) {
         if (!newProps[key]) {
@@ -91,8 +148,8 @@ function updataRpors(vnode, oldProps = {}) { // 第一次属性
 }
 
 // vnode 变成真实的dom
-export function createEL(vnode) {
-    const {tag, data, key, text, children} = vnode
+export function createEL (vnode) {
+    const { tag, data, key, text, children } = vnode
     if (typeof tag === 'string') {
         vnode.el = document.createElement(tag)
         updataRpors(vnode)

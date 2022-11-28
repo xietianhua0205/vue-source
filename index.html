@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div id="app" title="test" style="color: red;font-size: 20px">{{ msg.a }}-{{ arr }}</div>
+<div id="app"></div>
 <!--<script src="src/compile/test.js"></script>-->
 <script src="dist/vue.js"></script>
 <script>
@@ -13,45 +13,24 @@
     // console.log(Vue)
     // 响应式, vue2， mvvm
     // Vue.mixin({})
-    Vue.Mixin({  // 全局的方法
-        created() {
-            console.log(this.name)
-            console.log('a----1')
-        }
-    })
-    Vue.Mixin({  // 全局的方法
-        created() {
-        }
-    })
-
-    let vm = new Vue({
-        el: '#app',
-        // data: {},
-        data() {
-            return {
-                msg: {a: 1},
-                name: '张三',
-                arr: [1, 2, 3]
-            }
-        },
-        props: {},
-        watch: {},
-        methods: {},
-        created() {
-            console.log('created')
-        },
-        update() {
-            console.log('数据更新了！')
-        }
-    })
-    setTimeout(() => { // 数据更新多次, 渲染只需要一次， 通过异步来处理; nextTick()
-        vm.arr.push(2)
-        vm.arr.push(3)
-        vm.arr.push(4)
-        vm.$nextTick(() => {
-            console.log(vm.$el.innerHTML)
-        })
-    }, 2000)
+    // Vue.Mixin({  // 全局的方法
+    //     created() {
+    //         console.log(this.name)
+    //         console.log('a----1')
+    //     }
+    // })
+    // Vue.Mixin({  // 全局的方法
+    //     created() {
+    //     }
+    // })
+    // setTimeout(() => { // 数据更新多次, 渲染只需要一次， 通过异步来处理; nextTick()
+    //     vm.arr.push(2)
+    //     vm.arr.push(3)
+    //     vm.arr.push(4)
+    //     vm.$nextTick(() => {
+    //         console.log(vm.$el.innerHTML)
+    //     })
+    // }, 2000)
     // setTimeout(() => {
     //     vm.msg = '张三'
     // }, 3000)
